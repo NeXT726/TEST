@@ -14,7 +14,8 @@ int main()
     char *hello = str;
     char *world;
     char *tmp_ptr;
-    strtok_r(str, " ", &tmp_ptr);
+    char *ret_ptr = strtok_r(str, " ", &tmp_ptr);
     world = tmp_ptr;
     printf("hello:%s\nworld:%s\n", hello, world);
+    printf("str:%s\nret_ptr:%s\n", str, ret_ptr);
 }

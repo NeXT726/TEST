@@ -57,6 +57,59 @@ int get_method(char *method)
 
 int parse_buffer(char *buf, hheader *h, rheader *r, char *data_buf)
 {
+    char *now = buf;
+    char* next = NULL;
+    char *tmp_ptr = NULL;
+    int r_nm = 0;
+
+//将头部和数据部分分开，给data_buf赋值
+    tmp_ptr = strstr(buf, "\r\n\r\n");
+    *tmp_ptr = '\0';
+    tmp_ptr = tmp_ptr + 4;
+    strcpy(data_buf, tmp_ptr);
+
+//将固定头部，也就是第一行解析
+    next = strstr(now, "\r\n");
+    if(next != NULL) {
+        *next = '\0';
+        next = next + 2;
+    }
+    tmp_ptr = strtok(now, " ");
+    strcpy(h->method, tmp_ptr);
+    tmp_ptr = strtok(NULL, " ");
+    strcpy(h->url, tmp_ptr);
+    tmp_ptr = strtok(NULL, " ");
+    strcpy(h->version, tmp_ptr);
+  
+//解析可变长头部  
+    while (next != NULL) {
+        now = next;
+        next = strstr(now, "\r\n") ;
+        if(next != NULL) {
+            *next = '\0';
+            next = next + 2;
+        }
+        
+        if(r_nm > R_NM) {
+            printf("可变长头部过多！\n");
+            return -1;
+        };
+
+        tmp_ptr = NULL;
+        strtok_r(now, ":", &tmp_ptr);
+        strcpy(r[r_nm].name, now);
+        strcpy(r[r_nm].value, tmp_ptr);
+        r_nm++;
+    }
+}
+
+/*
+    这个函数使用了strtok_r函数，尝试使用字符串分割字符串。
+    但这个函数的作用是用字符分割字符串，所以错误。
+    所以上面使用strstr的方式重写了一个函数。
+*/
+int parse_buffer_wrong(char *buf, hheader *h, rheader *r, char *data_buf)
+{
     char *header;
     header = buf;
     char *tmp_ptr;
@@ -102,9 +155,10 @@ int main(){
     memset(data_buffer, 0, BUFFER_SZ);
 
     parse_buffer(buff, &headerh, headerr, data_buffer);
-/*
+
     printf("method:%s\n", headerh.method);
     printf("url:%s\n", headerh.url);
     printf("version:%s\n", headerh.version);
-*/
+    printf("data:%s\n", data_buffer);
+
 }

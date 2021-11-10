@@ -1,3 +1,9 @@
+/**
+ * 这个代码运行结果是错的。
+ * 原因是因为strtok函数是以字符分割的，而不是字符串
+ * 下面的思路是继续用strstr做分割。、
+*/
+
 #include <stdio.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>

@@ -1,4 +1,5 @@
 //https://blog.csdn.net/fengyishang/article/details/45220823?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3.pc_relevant_aa&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3.pc_relevant_aa&utm_relevant_index=6
+//MacOS编译Poco代码需要选项-lPocoUtil -lPocoXML -lPocoJSON -lPocoNet -lPocoFoundation
 
 #include <Poco/Net/ServerSocket.h>
 #include <Poco/Net/HTTPServer.h>

@@ -10,7 +10,7 @@ using namespace Aws;
 
 std::shared_ptr<AWSS3::S3Client> S3Client;
 
-Vector<S3::Model::Bucket> GetBucketsInS3()
+const Vector<S3::Model::Bucket>& GetBucketsInS3()
 {
     auto outcome = S3Client->client->ListBuckets();
     if (outcome.IsSuccess()) {
@@ -50,7 +50,7 @@ Vector<S3::Model::Object> GetObjectsInBucket(String Bucket)
     }
 }
 
-IOStream& DownloadObject(String bucket, String key, std::string output_file = "")
+bool DownloadObject(String bucket, String key, std::string output_file = "")
 {
     Aws::S3::Model::GetObjectRequest req;
     req.SetBucket(bucket);
@@ -68,7 +68,7 @@ IOStream& DownloadObject(String bucket, String key, std::string output_file = ""
         while(retrieved_file.getline(file_data, 254)){
             std::cout << file_data << std::endl;
         }
-        return retrieved_file;
+        return true;
     }
     else if(outcome.IsSuccess() && !output_file.empty())
     {
@@ -85,12 +85,14 @@ IOStream& DownloadObject(String bucket, String key, std::string output_file = ""
             outfile.write(file_data, read_bytes);
         }
         outfile.close();
+        return true;
     }
     else
     {
         auto err = outcome.GetError();
         std::cout << "Error: GetObject: " <<
             err.GetExceptionName() << ": " << err.GetMessage() << std::endl;
+        return false;
     }
 }
 

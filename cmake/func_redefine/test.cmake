@@ -1,0 +1,7 @@
+function(TEST)
+    message("TEST3")
+    message("TEST3")
+    message("TEST3")
+    message("TEST3")
+    message("TEST3")
+endfunction()

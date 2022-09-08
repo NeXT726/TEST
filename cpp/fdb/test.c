@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <fdb_c.h>
+#include <foundationdb/fdb_c.h>
 #include <unistd.h>
 
 FDBTenant *fdb_tenant = NULL;
@@ -104,7 +104,9 @@ void readDataFromDatabase() {
   checkError(
       fdb_future_get_value(getFuture, &valuePresent, &value, &valueLength));
 
-  printf("Got Value from db. %s: '%.*s'\n", key, valueLength, value);
+  char * buf = (char *) value;
+
+  printf("Got Value from db. %s: '%.*s'\n", key, valueLength, buf);
   fdb_transaction_destroy(tr);
   fdb_future_destroy(getFuture);
 }
@@ -127,10 +129,10 @@ int main() {
   createDataInDatabase();
   readDataFromDatabase();
 
-  createTenantDataAndReadData();
+  // createTenantDataAndReadData();
 
   puts("Program done. Now exiting...");
-  fdb_tenant_destroy(fdb_tenant);
+  // fdb_tenant_destroy(fdb_tenant);
   fdb_tenant = NULL;
   fdb_database_destroy(db);
   db = NULL;
